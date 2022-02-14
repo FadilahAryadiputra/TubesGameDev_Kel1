@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
     public bool isHoldingJump = false;
     public float maxHoldJumpTime = 0.4f;
     public float holdJumpTimer = 0.0f;
+    public float jumpGroundThreshold = 1;
 
     // Start is called before the first frame update
     void Start()
@@ -40,6 +41,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         Vector2 pos = transform.position;
+        float groundDistance = Mathf.Abs(pos.y - groundHeight);
 
         // if(Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow))//Input.GetKeyDown() waits for the user to press a key once
 		// {
@@ -49,13 +51,15 @@ public class PlayerController : MonoBehaviour
         //         velocity.y = jumpVelocity;
 		// 	}
 		// }
-        if (isGrounded)
+
+        if (isGrounded || groundDistance <= jumpGroundThreshold)
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 isGrounded = false;
                 velocity.y = jumpVelocity;
                 isHoldingJump = true;
+                holdJumpTimer = 0;
             }
         }
         if (Input.GetKeyUp(KeyCode.Space))
@@ -152,6 +156,7 @@ public class PlayerController : MonoBehaviour
 		{
 			isGrounded = true;///so grounded must be true because Player has hit the floor.
             isJumping = false;
+            holdJumpTimer = 0;
 		}
 	}
     void OnCollisionExit2D(Collision2D col)

@@ -1024,8 +1024,9 @@ MonoBehaviour:
   acceleration: 5
   jumpVelocity: 25
   isHoldingJump: 0
-  maxHoldJumpTime: 0.2
+  maxHoldJumpTime: 0.1
   holdJumpTimer: 0
+  jumpGroundThreshold: 3
 --- !u!58 &1623088317
 CircleCollider2D:
   m_ObjectHideFlags: 0
