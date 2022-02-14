@@ -657,7 +657,7 @@ GameObject:
   - component: {fileID: 1218078200}
   m_Layer: 0
   m_Name: GroundTest (1)
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1010,20 +1010,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e69b58aa2b51f444a573ea6f44da6bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dashSpeed: 20
+  dashSpeed: 30
   startDashTime: 0.1
   isDead: 0
   isGrounded: 0
   isJumping: 0
-  jumpForceValue: 200
-  jumpForce: 0
-  sidSpd: 0
-  moveSpd: 0
+  gravity: -180
   velocity: {x: 0, y: 0}
+  groundHeight: -5
   distance: 0
-  maxXVelocity: 40
+  maxXVelocity: 20
   maxAcceleration: 10
-  acceleration: 10
+  acceleration: 5
+  jumpVelocity: 25
+  isHoldingJump: 0
+  maxHoldJumpTime: 0.2
+  holdJumpTimer: 0
 --- !u!58 &1623088317
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -1055,7 +1057,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
