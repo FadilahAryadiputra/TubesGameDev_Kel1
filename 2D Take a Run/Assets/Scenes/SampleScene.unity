@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 134741380}
   m_Layer: 0
   m_Name: SlideTest
-  m_TagString: Ground
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -444,6 +444,7 @@ MonoBehaviour:
   groundHeight: 0
   groundRight: 0
   screenRight: 0
+  boxTemplate: {fileID: 8474953790795288930, guid: 1c6602005e2bfb74082c52319c0f8506, type: 3}
 --- !u!61 &927874814
 BoxCollider2D:
   m_ObjectHideFlags: 0

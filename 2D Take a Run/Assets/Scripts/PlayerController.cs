@@ -44,15 +44,6 @@ public class PlayerController : MonoBehaviour
         Vector2 pos = transform.position;
         float groundDistance = Mathf.Abs(pos.y - groundHeight);
 
-        // if(Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow))//Input.GetKeyDown() waits for the user to press a key once
-		// {
-		// 	if(isGrounded == true)//if my player is grounded do whats in the barckets
-		// 	{
-		// 		isJumping=true;
-        //         velocity.y = jumpVelocity;
-		// 	}
-		// }
-
         if (isGrounded || groundDistance <= jumpGroundThreshold)
         {
             if (Input.GetKeyDown(KeyCode.Space))
@@ -160,6 +151,11 @@ public class PlayerController : MonoBehaviour
             isJumping = false;
             holdJumpTimer = 0;
 		}
+
+        if (col.transform.tag.Equals("Obstacle"))
+        {
+            velocity.x *= 0.7f;
+        }
 	}
     void OnCollisionExit2D(Collision2D col)
 	{
@@ -170,4 +166,5 @@ public class PlayerController : MonoBehaviour
 		}
 
 	}
+
 }
