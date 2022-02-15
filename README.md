@@ -6,6 +6,7 @@ Game Title  : 2D Take a Run
 Status      : On-Going
 
 Control :
+- Z			->	Attack
 - Space     ->  Jump
 - Arrow Key ->  Dash
 - R         ->  Restart
