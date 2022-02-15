@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
+    Animator anim;
     private Rigidbody2D rb;
     public float dashSpeed;
     private float dashTime;
@@ -30,12 +31,21 @@ public class PlayerController : MonoBehaviour
     public float holdJumpTimer = 0.0f;
     public float jumpGroundThreshold = 1;
 
+    public float healthAmount = 3;
+    bool isCanAttack = true;
+    public float cooldown = -.5f;
+    public GameObject hitArea;
+    public Vector2 hitAreaOffset;
+
     // Start is called before the first frame update
     void Start()
     {
+        anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         dashTime = startDashTime;
         isJumping=false;
+        isCanAttack = true;
+        healthAmount = 3;
     }
 
     // Update is called once per frame
@@ -49,19 +59,27 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 isGrounded = false;
-                velocity.y = jumpVelocity;
+                isJumping = true;
                 isHoldingJump = true;
+                velocity.y = jumpVelocity;
                 holdJumpTimer = 0;
             }
         }
-        if (Input.GetKeyUp(KeyCode.Space))
-        {
-            isHoldingJump = false;
-        }
+        if(Input.GetKeyDown(KeyCode.Z))
+		{
+			playerAttack();
+		}
         if(Input.GetKeyDown(KeyCode.R))
 		{
-			SceneManager.LoadScene("SampleScene");
+			SceneManager.LoadScene("GamePlay");
 		}
+
+        if (healthAmount <= 0)
+        {
+            Destroy (gameObject);
+            isDead = true;
+        }
+
 
         if(direction == 0 ){
             if(Input.GetKeyDown(KeyCode.LeftArrow)){
@@ -123,6 +141,7 @@ public class PlayerController : MonoBehaviour
                 pos.y = groundHeight;
                 isGrounded = true;
                 holdJumpTimer = 0;
+                velocity.y = 0;
             }
         }
 
@@ -150,11 +169,17 @@ public class PlayerController : MonoBehaviour
 			isGrounded = true;///so grounded must be true because Player has hit the floor.
             isJumping = false;
             holdJumpTimer = 0;
+            velocity.y = 0;
 		}
 
         if (col.transform.tag.Equals("Obstacle"))
         {
             velocity.x *= 0.7f;
+        }
+
+        if (col.transform.tag.Equals("Enemy"))
+        {
+            healthAmount -= 1f;
         }
 	}
     void OnCollisionExit2D(Collision2D col)
@@ -167,4 +192,22 @@ public class PlayerController : MonoBehaviour
 
 	}
 
+    void playerAttack()
+    {
+        if (isCanAttack)
+        {
+            StartCoroutine(CanAttack());
+            // anim.SetTrigger("playerAttack");
+            // GameObject hitPoint = Instantiate(hitArea.gameObject);
+            GameObject hitPoint = Instantiate(hitArea, (Vector2)transform.position - hitAreaOffset * transform.localScale.x, Quaternion.identity);
+        }
+    }
+    IEnumerator CanAttack()
+    {
+        // anim.SetTrigger("playerAttack");
+        isCanAttack = false;
+        yield return new WaitForSeconds(cooldown);
+        // anim.ResetTrigger("playerAttack");
+        isCanAttack = true;
+    }
 }
