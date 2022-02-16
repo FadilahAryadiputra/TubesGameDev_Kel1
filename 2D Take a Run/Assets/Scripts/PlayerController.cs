@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
 
     public float healthAmount = 3;
     bool isCanAttack = true;
-    public float cooldown = -.5f;
+    public float attackCooldown = 0.5f;
     public GameObject hitArea;
     public Vector2 hitAreaOffset;
 
@@ -68,10 +68,6 @@ public class PlayerController : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Z))
 		{
 			playerAttack();
-		}
-        if(Input.GetKeyDown(KeyCode.R))
-		{
-			SceneManager.LoadScene("GamePlay");
 		}
 
         if (healthAmount <= 0)
@@ -172,11 +168,6 @@ public class PlayerController : MonoBehaviour
             velocity.y = 0;
 		}
 
-        if (col.transform.tag.Equals("Obstacle"))
-        {
-            velocity.x *= 0.7f;
-        }
-
         if (col.transform.tag.Equals("Enemy"))
         {
             healthAmount -= 1f;
@@ -191,6 +182,18 @@ public class PlayerController : MonoBehaviour
 		}
 
 	}
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.transform.tag.Equals("Obstacle"))
+        {
+            velocity.x *= 0.7f;
+        }
+        if (col.transform.tag.Equals("DeadZone"))
+        {
+            Destroy(this.gameObject);
+            isDead = true;
+        }
+    }
 
     void playerAttack()
     {
@@ -206,7 +209,7 @@ public class PlayerController : MonoBehaviour
     {
         // anim.SetTrigger("playerAttack");
         isCanAttack = false;
-        yield return new WaitForSeconds(cooldown);
+        yield return new WaitForSeconds(attackCooldown);
         // anim.ResetTrigger("playerAttack");
         isCanAttack = true;
     }

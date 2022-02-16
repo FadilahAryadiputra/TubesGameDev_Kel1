@@ -14,6 +14,7 @@ public class Ground : MonoBehaviour
     bool didGenerateGround = false;
 
     public Obstacle boxTemplate;
+    public GameObject[] Enemy;
 
     private void Awake()
     {
@@ -97,11 +98,26 @@ public class Ground : MonoBehaviour
         goGround.groundHeight = go.transform.position.y + (goCollider.size.y / 2);
 
 
-        int obstacleNum = Random.Range(0, 4);
+        int obstacleNum = Random.Range(0, 2);
         for (int i=0; i<obstacleNum; i++)
         {
             GameObject box = Instantiate(boxTemplate.gameObject);
             float y = goGround.groundHeight;
+            float halfWidth = goCollider.size.x / 2 - 1;
+            float left = go.transform.position.x - halfWidth;
+            float right = go.transform.position.x + halfWidth;
+            float x = Random.Range(left, right);
+            Vector2 boxPos = new Vector2(x, y);
+            box.transform.position = boxPos;
+        }
+        int enemyNum = Random.Range(0, 2);
+        for (int i=0; i<enemyNum; i++)
+        {
+            int random = Random.Range(0, Enemy.Length);
+            var Array = new int[] { 0, 2 };
+            GameObject box = Instantiate(Enemy[random].gameObject);
+            float y = goGround.groundHeight + Array[Random.Range(0, Array.Length)];;
+            // float y = goGround.groundHeight + Random.Range(0, 5);;
             float halfWidth = goCollider.size.x / 2 - 1;
             float left = go.transform.position.x - halfWidth;
             float right = go.transform.position.x + halfWidth;

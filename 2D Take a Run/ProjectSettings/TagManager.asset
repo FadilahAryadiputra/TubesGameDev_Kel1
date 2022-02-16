@@ -8,6 +8,7 @@ TagManager:
   - Obstacle
   - HitArea
   - Enemy
+  - DeadZone
   layers:
   - Default
   - TransparentFX

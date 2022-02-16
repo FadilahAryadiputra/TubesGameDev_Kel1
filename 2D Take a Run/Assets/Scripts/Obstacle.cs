@@ -35,7 +35,7 @@ public class Obstacle : MonoBehaviour
         transform.position = pos;
     }
 
-    void OnCollisionEnter2D(Collision2D col)
+    void OnTriggerEnter2D(Collider2D col)
     {
         if (col.transform.tag.Equals("Player"))
         {
