@@ -7,17 +7,22 @@ using UnityEngine.SceneManagement;
 public class UIController : MonoBehaviour
 {
     PlayerController player;
-    Text distanceText;
+    public Text distanceText;
+    public Text scoreText;
 
     GameObject results;
-    Text finalDistanceText;
+    public Text finalDistanceText;
+    public Text finalScoreText;
+    public Text highScoreText;
+
+    public static int score;
+    int highscorePoint;
+    int highscoreDistance;
 
     private void Awake()
     {
         player = GameObject.Find("Player").GetComponent<PlayerController>();
-        distanceText = GameObject.Find("DistanceText").GetComponent<Text>();
         results = GameObject.Find("Results");
-        finalDistanceText = GameObject.Find("FinalDistanceText").GetComponent<Text>();
 
         results.SetActive(false);
     }
@@ -25,7 +30,8 @@ public class UIController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        highscorePoint = PlayerPrefs.GetInt("HSpoint", 0);
+        highscoreDistance = PlayerPrefs.GetInt("HSdistance", 0);
     }
 
     // Update is called once per frame
@@ -33,15 +39,31 @@ public class UIController : MonoBehaviour
     {
         int distance = Mathf.FloorToInt(player.distance);
         distanceText.text = distance + " m";
+        scoreText.text = score.ToString("0") + " p";
 
         if (player.isDead)
         {
             results.SetActive(true);
             finalDistanceText.text = distance + " m";
+            finalScoreText.text = score.ToString("") + " p";
+            if (score > highscorePoint)
+            {
+                highscorePoint = score;
+                PlayerPrefs.SetInt("HSpoint", highscorePoint);
+            }
+            if (distance > highscoreDistance)
+            {
+                highscoreDistance = distance;
+                PlayerPrefs.SetInt("HSdistance", highscoreDistance);
+            }
         }
+        highScoreText.text = highscoreDistance.ToString("") + " m / " + highscorePoint.ToString("") + " p";
     }
 
-
+    public void loadGamePlay()
+    {
+        SceneManager.LoadScene("GamePlay");
+    }
     public void Quit()
     {
         SceneManager.LoadScene("Menu");

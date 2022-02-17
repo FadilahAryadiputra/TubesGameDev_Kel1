@@ -38,6 +38,7 @@ public class EnemyController : MonoBehaviour
     {
         if (col.transform.tag.Equals("HitArea"))
         {
+            UIController.score += 20;
             Destroy(this.gameObject);
         }
     }
