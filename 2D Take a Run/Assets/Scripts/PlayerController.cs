@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -55,23 +56,22 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector2 pos = transform.position;
-        float groundDistance = Mathf.Abs(pos.y - groundHeight);
+        
+        
 
-        if (isGrounded || groundDistance <= jumpGroundThreshold)
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                isGrounded = false;
-                isJumping = true;
-                isHoldingJump = true;
-                velocity.y = jumpVelocity;
-                holdJumpTimer = 0;
-            }
+            Jump();
+            isHoldingJump = true;
         }
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            isHoldingJump = false;
+        }
+
         if(Input.GetKeyDown(KeyCode.Z))
 		{
-			playerAttack();
+			Attack();
 		}
 
         if (healthAmount <= 0)
@@ -216,7 +216,36 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void playerAttack()
+    public void JumpBtnKeyDown()
+    {
+        Jump();
+        isHoldingJump = true;
+    }
+    public void JumpBtnKeyUp()
+    {
+        isHoldingJump = false;
+    }
+    public void AttackBtn()
+    {
+        Attack();
+    }
+    void Jump()
+    {
+        Vector2 pos = transform.position;
+        float groundDistance = Mathf.Abs(pos.y - groundHeight);
+
+        if (isGrounded || groundDistance <= jumpGroundThreshold)
+        {
+            {
+                isGrounded = false;
+                isJumping = true;
+                velocity.y = jumpVelocity;
+                holdJumpTimer = 0;
+            }
+        }
+    }
+
+    void Attack()
     {
         if (isCanAttack)
         {
