@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -31,7 +31,11 @@ public class PlayerController : MonoBehaviour
     public float holdJumpTimer = 0.0f;
     public float jumpGroundThreshold = 1;
 
+    public int numOfHearts = 3;
     public float healthAmount = 3;
+    public Image[] hearts;
+    public Sprite fullHearth;
+    public Sprite emptyHeart;
     bool isCanAttack = true;
     public float attackCooldown = 0.5f;
     public GameObject hitArea;
@@ -72,10 +76,28 @@ public class PlayerController : MonoBehaviour
 
         if (healthAmount <= 0)
         {
-            Destroy (gameObject);
+            Destroy(this.gameObject);
             isDead = true;
         }
 
+        if(healthAmount > numOfHearts){
+            healthAmount = numOfHearts;
+        }
+
+        for (int i = 0; i < hearts.Length; i++){
+
+            if(i < healthAmount){
+                hearts[i].sprite = fullHearth;
+            } else {
+                hearts[i].sprite = emptyHeart;
+            }
+
+            if(i < numOfHearts){
+                hearts[i].enabled = true;
+            } else {
+                hearts[i].enabled = false;
+            }
+        }
 
         if(direction == 0 ){
             if(Input.GetKeyDown(KeyCode.LeftArrow)){
@@ -190,8 +212,7 @@ public class PlayerController : MonoBehaviour
         }
         if (col.transform.tag.Equals("DeadZone"))
         {
-            Destroy(this.gameObject);
-            isDead = true;
+            healthAmount = 0;
         }
     }
 
