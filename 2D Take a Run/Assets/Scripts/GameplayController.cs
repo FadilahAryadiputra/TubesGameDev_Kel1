@@ -17,7 +17,7 @@ public class GameplayController : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.R))
 		{
 			SceneManager.LoadScene("GamePlay");
-            UIController.score = 0;
+            ShowScore.score = 0;
 		}
     }
 }

@@ -77,6 +77,7 @@ public class PlayerController : MonoBehaviour
         if (healthAmount <= 0)
         {
             Destroy(this.gameObject);
+            SceneManager.LoadScene("GameOver");
             isDead = true;
         }
 
