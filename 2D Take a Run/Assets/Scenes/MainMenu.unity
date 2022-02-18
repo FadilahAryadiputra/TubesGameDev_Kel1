@@ -1377,11 +1377,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b491f46dc6f0c84daac25b6d1f7b0af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distanceText: {fileID: 0}
-  scoreText: {fileID: 0}
-  finalDistanceText: {fileID: 0}
-  finalScoreText: {fileID: 0}
-  highScoreText: {fileID: 0}
 --- !u!114 &424222476
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1452,7 +1447,7 @@ Animator:
   m_GameObject: {fileID: 424222471}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: b9e52e21db6b12748a4cacfcf6c972c5, type: 2}
+  m_Controller: {fileID: 9100000, guid: 63339da42f532104d9654fe6dc957fa1, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
