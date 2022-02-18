@@ -66,7 +66,8 @@ public class UIController : MonoBehaviour
     }
     public void Quit()
     {
-        SceneManager.LoadScene("Menu");
+        Application.Quit();
+        Debug.Log("Game is exiting");
     }
 
     public void Retry()
