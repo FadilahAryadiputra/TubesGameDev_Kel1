@@ -185,6 +185,7 @@ public class PlayerController : MonoBehaviour
 		Debug.Log ("you hit something: " + col.collider.tag);//basic print message for debugging purposes
 		if (col.collider.tag == "Ground")//if the object you collided withs tag is ground your player is on the floor
 		{
+            anim.SetTrigger("Run");
 			isGrounded = true;///so grounded must be true because Player has hit the floor.
             isJumping = false;
             holdJumpTimer = 0;
@@ -202,6 +203,7 @@ public class PlayerController : MonoBehaviour
 		if (col.collider.tag == "Ground")//if the object you WERE colliding withs tag is ground your player is leaving the floor
 		{
 			isGrounded = false;//Player is no longer grounded
+            anim.SetTrigger("Jump");
 		}
 
 	}
@@ -253,7 +255,9 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(CanAttack());
             // anim.SetTrigger("playerAttack");
             // GameObject hitPoint = Instantiate(hitArea.gameObject);
+            anim.SetTrigger("Attack");
             GameObject hitPoint = Instantiate(hitArea, (Vector2)transform.position - hitAreaOffset * transform.localScale.x, Quaternion.identity);
+            hitPoint.transform.parent = gameObject.transform;
         }
     }
     IEnumerator CanAttack()

@@ -14,6 +14,8 @@ public class ShowScore : MonoBehaviour
     public static int score;
     public static int finalDistance;
 
+    public GameObject newPlayer;
+
     private void Awake()
     {
         player = GameObject.Find("Player").GetComponent<PlayerController>();
