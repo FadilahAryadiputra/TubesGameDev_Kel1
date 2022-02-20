@@ -5,6 +5,12 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
     PlayerController player;
+
+    Animator anim;
+    public GameObject Explosion;
+    public AudioSource isDestroyedSound;
+    public AudioSource isHitSound;
+
     private void Awake()
     {
         player = GameObject.Find("Player").GetComponent<PlayerController>();
@@ -12,7 +18,7 @@ public class EnemyController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -26,7 +32,7 @@ public class EnemyController : MonoBehaviour
         Vector2 pos = transform.position;
 
         pos.x -= player.velocity.x * Time.fixedDeltaTime;
-        if (pos.x < -100)
+        if (pos.x < -20)
         {
             Destroy(gameObject);
         }
@@ -38,15 +44,19 @@ public class EnemyController : MonoBehaviour
     {
         if (col.transform.tag.Equals("HitArea"))
         {
+            anim.SetBool("Die", true);
+            Destroy(this.gameObject, 2);
             ShowScore.score += 20;
-            Destroy(this.gameObject);
+            isHitSound.Play();
         }
     }
     void OnCollisionEnter2D(Collision2D col)
     {
         if (col.transform.tag.Equals("Player"))
         {
+            Instantiate (Explosion,transform.position,transform.rotation);
             Destroy(this.gameObject);
+            isDestroyedSound.Play();
         }
     }
 }

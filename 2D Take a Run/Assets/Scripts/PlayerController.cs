@@ -8,10 +8,6 @@ public class PlayerController : MonoBehaviour
 {
     Animator anim;
     private Rigidbody2D rb;
-    public float dashSpeed;
-    private float dashTime;
-    public float startDashTime;
-    private int direction;
 
     public bool isDead = false;
 
@@ -32,6 +28,7 @@ public class PlayerController : MonoBehaviour
     public float holdJumpTimer = 0.0f;
     public float jumpGroundThreshold = 1;
 
+    float timer = 0;
     public int numOfHearts = 3;
     public float healthAmount = 3;
     public Image[] hearts;
@@ -42,12 +39,23 @@ public class PlayerController : MonoBehaviour
     public GameObject hitArea;
     public Vector2 hitAreaOffset;
 
+    public AudioSource jumpSound;
+    public AudioSource attackSound;
+    public AudioSource hurtSound;
+    public AudioSource hitObstacleSound;
+    public AudioSource deathSound;
+
+    public GameObject gameOver;
+
+    private void Awake()
+    {
+        gameOver.SetActive(false);
+    }
     // Start is called before the first frame update
     void Start()
     {
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
-        dashTime = startDashTime;
         isJumping=false;
         isCanAttack = true;
         healthAmount = 3;
@@ -76,9 +84,14 @@ public class PlayerController : MonoBehaviour
 
         if (healthAmount <= 0)
         {
-            Destroy(this.gameObject);
-            SceneManager.LoadScene("GameOver");
             isDead = true;
+            gameOver.SetActive(true);
+            deathSound.Play();
+            Destroy(this.gameObject, 2);
+            timer += Time.deltaTime;
+            if(timer > 2){
+                SceneManager.LoadScene("GameOver");
+            }
         }
 
         if(healthAmount > numOfHearts){
@@ -97,38 +110,6 @@ public class PlayerController : MonoBehaviour
                 hearts[i].enabled = true;
             } else {
                 hearts[i].enabled = false;
-            }
-        }
-
-        if(direction == 0 ){
-            if(Input.GetKeyDown(KeyCode.LeftArrow)){
-                direction = 1;
-            } else if(Input.GetKeyDown(KeyCode.RightArrow)){
-                direction = 2;
-            } else if(Input.GetKeyDown(KeyCode.UpArrow)){
-                direction = 3;
-            } else if(Input.GetKeyDown(KeyCode.DownArrow)){
-                direction = 4;
-            }
-        } else {
-            if(dashTime <= 0){
-                direction = 0;
-                dashTime = startDashTime;
-                rb.velocity = Vector2.zero;
-            } else {
-                dashTime -= Time.deltaTime;
-
-                if(direction == 1){
-                    rb.velocity = Vector2.left * dashSpeed;
-                } else if(direction == 2){
-                    rb.velocity = Vector2.right * dashSpeed;
-                }
-                else if(direction == 3){
-                    rb.velocity = Vector2.up * dashSpeed;
-                }
-                else if(direction == 4){
-                    rb.velocity = Vector2.down * dashSpeed;
-                }
             }
         }
     }
@@ -186,6 +167,8 @@ public class PlayerController : MonoBehaviour
 		if (col.collider.tag == "Ground")//if the object you collided withs tag is ground your player is on the floor
 		{
             anim.SetTrigger("Run");
+            anim.ResetTrigger("Hurt");
+            anim.ResetTrigger("Attack");
 			isGrounded = true;///so grounded must be true because Player has hit the floor.
             isJumping = false;
             holdJumpTimer = 0;
@@ -194,7 +177,15 @@ public class PlayerController : MonoBehaviour
 
         if (col.transform.tag.Equals("Enemy"))
         {
+            hurtSound.Play();
             healthAmount -= 1f;
+            velocity.x *= 0.7f;
+            anim.SetBool("Hurt", true);
+            timer += Time.deltaTime;
+            if(timer > 0.2){
+                anim.SetBool("Hurt", false);
+                anim.SetTrigger("Run");
+            }
         }
 	}
     void OnCollisionExit2D(Collision2D col)
@@ -212,6 +203,8 @@ public class PlayerController : MonoBehaviour
         if (col.transform.tag.Equals("Obstacle"))
         {
             velocity.x *= 0.7f;
+            hitObstacleSound.Play();
+            anim.SetTrigger("Hurt");
         }
         if (col.transform.tag.Equals("DeadZone"))
         {
@@ -242,6 +235,7 @@ public class PlayerController : MonoBehaviour
             {
                 isGrounded = false;
                 isJumping = true;
+                jumpSound.Play();
                 velocity.y = jumpVelocity;
                 holdJumpTimer = 0;
             }
@@ -256,6 +250,7 @@ public class PlayerController : MonoBehaviour
             // anim.SetTrigger("playerAttack");
             // GameObject hitPoint = Instantiate(hitArea.gameObject);
             anim.SetTrigger("Attack");
+            attackSound.Play();
             GameObject hitPoint = Instantiate(hitArea, (Vector2)transform.position - hitAreaOffset * transform.localScale.x, Quaternion.identity);
             hitPoint.transform.parent = gameObject.transform;
         }

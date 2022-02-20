@@ -5,7 +5,9 @@ using UnityEngine;
 public class Obstacle : MonoBehaviour
 {
     PlayerController player;
-
+    Animator anim;
+    private Rigidbody2D rb;
+    public AudioSource isHitSound;
     private void Awake()
     {
         player = GameObject.Find("Player").GetComponent<PlayerController>();
@@ -13,7 +15,8 @@ public class Obstacle : MonoBehaviour
 
     void Start()
     {
-        
+        anim = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -27,7 +30,7 @@ public class Obstacle : MonoBehaviour
         Vector2 pos = transform.position;
 
         pos.x -= player.velocity.x * Time.fixedDeltaTime;
-        if (pos.x < -100)
+        if (pos.x < -20)
         {
             Destroy(gameObject);
         }
@@ -39,7 +42,13 @@ public class Obstacle : MonoBehaviour
     {
         if (col.transform.tag.Equals("Player"))
         {
-            Destroy(this.gameObject);
+            // rb.velocity = Vector2.zero;
+            rb.AddForce(Physics.gravity * 8 * rb.mass);
+            rb.AddForce(Vector2.up * 1, ForceMode2D.Impulse);
+            rb.AddForce(Vector2.right * 3, ForceMode2D.Impulse);
+            anim.SetBool("Die", true);
+            isHitSound.Play();
+            Destroy(this.gameObject, 2);
         }
     }
 }

@@ -102,7 +102,7 @@ public class Ground : MonoBehaviour
         for (int i=0; i<obstacleNum; i++)
         {
             GameObject box = Instantiate(boxTemplate.gameObject);
-            float y = goGround.groundHeight;
+            float y = goGround.groundHeight - 0.5f;
             float halfWidth = goCollider.size.x / 2 - 1;
             float left = go.transform.position.x - halfWidth;
             float right = go.transform.position.x + halfWidth;
@@ -116,7 +116,7 @@ public class Ground : MonoBehaviour
             int random = Random.Range(0, Enemy.Length);
             var Array = new int[] { 0, 2 };
             GameObject box = Instantiate(Enemy[random].gameObject);
-            float y = goGround.groundHeight + Array[Random.Range(0, Array.Length)];;
+            float y = goGround.groundHeight + Array[Random.Range(0, Array.Length)] - 0.25f;
             // float y = goGround.groundHeight + Random.Range(0, 5);;
             float halfWidth = goCollider.size.x / 2 - 1;
             float left = go.transform.position.x - halfWidth;
