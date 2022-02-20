@@ -8,5 +8,4 @@ Status      : On-Going
 Control :
 - Z			->	Attack
 - Space     ->  Jump
-- Arrow Key ->  Dash
 - R         ->  Restart
